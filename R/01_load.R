@@ -7,7 +7,7 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-project_data_raw2 <- read_csv2(file = "data/_raw/project_data_raw.csv")
+project_data_raw <- read_csv2(file = "data/_raw/project_data_raw.csv")
 
 
 # Wrangle data ------------------------------------------------------------
