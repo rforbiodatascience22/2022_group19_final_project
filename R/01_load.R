@@ -7,13 +7,13 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-my_data_raw <- read_tsv(file = "data/_raw/my_raw_data.tsv")
+project_data_raw2 <- read_csv2(file = "data/_raw/project_data_raw.csv")
 
 
 # Wrangle data ------------------------------------------------------------
-my_data <- my_data_raw # %>% ...
+project_data <- project_data_raw # %>% ...
 
 
 # Write data --------------------------------------------------------------
-write_tsv(x = my_data,
+write_tsv(x = project_data,
           file = "data/01_my_data.tsv")
