@@ -10,7 +10,7 @@ project_data_raw <- read_csv2(file = "data/_raw/project_data_raw.csv")
 project_data <- project_data_raw %>%
   #filter(!sample %in% c("NTC (H2O)","NTC (BCB)")) %>%
   mutate(id = paste0(Peptide, " (", Origin, ")")) %>%
-  filter(p < 0.05 & log_fold_change > -5)
+  filter(p < 0.01 & log_fold_change > 0)
   
 
 # Visualize data ----------------------------------------------------------  
@@ -23,13 +23,13 @@ plot <- project_data %>%
              scales = "free_y", 
              space = "free") +
   scale_fill_gradient2(low = "red", 
-                       mid = "white", 
-                       high = "darkgreen") +
+                       mid = "yellow", 
+                       high = "red") +
   labs(x = "Sample", 
        y = "Peptide", 
        title = "Awesome title", 
        tag = "HLA type", 
-       fill = "Title") +
+       fill = "Log2 \nFold \nChange") +
   theme(plot.tag = element_text(angle = -90),
         plot.tag.position = c(1.05, 0.5),
         strip.text.y = element_text(angle = 0),
