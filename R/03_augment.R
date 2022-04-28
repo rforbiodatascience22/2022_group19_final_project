@@ -1,19 +1,13 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 
-
-# Define functions --------------------------------------------------------
-source(file = "R/99_project_functions.R")
-
-
 # Load data ---------------------------------------------------------------
-my_data_clean <- read_tsv(file = "data/02_my_data_clean.tsv")
-
+project_data_clean <- read_csv(file = "data/02_project_data_clean.csv")
 
 # Wrangle data ------------------------------------------------------------
-my_data_clean_aug <- my_data_clean # %>% ...
-
+project_data_clean_aug <- project_data_clean %>%
+  mutate(id = paste0(Peptide, " (", Origin, ")"))
 
 # Write data --------------------------------------------------------------
-write_tsv(x = my_data_clean_aug,
-          file = "data/03_my_data_clean_aug.tsv")
+write_csv(x = project_data_clean_aug,
+          file = "data/03_project_data_clean_aug.csv")
