@@ -27,18 +27,39 @@ pointsabovelogfold2 = project_data_raw %>%
 pointsbelowlogfold2 = project_data_raw %>% 
   filter(log_fold_change < 2)
 
-# Model data
-my_data_clean_aug %>% ...
+project_data_raw %>% 
+  select(Origin) %>% 
+  count(Origin)
 
-# Visualise data ----------------------------------------------------------
-my_data_clean_aug %>% ...
+#pooling all groups of vira with less than 100 hits into HHV or Others
+project_data_raw_aug = project_data_raw %>% 
+  mutate(newID = case_when(Origin == "CMV" ~ "CMV",
+                           Origin == "Covid-19" ~ "Covid-19",
+                           Origin == "hCoV" ~ "hCoV",
+                           Origin == "EBV" ~ "EBV",
+                           Origin == "FLU-A" ~ "FLU-A",
+                           Origin == "HHV-1" ~ "HHV",
+                           Origin == "HHV-2" ~ "HHV",
+                           Origin == "B19" ~ "Others",
+                           Origin == "HAdV-C" ~ "Others",
+                           Origin == "NWV" ~ "Others",
+                           Origin == "HIV-1" ~ "Others",
+                           Origin == "VACV" ~ "Others",
+                           Origin == "HMPV" ~ "Others",
+                           Origin == "BKPyV" ~ "Others",
+                           Origin == "JCPyV" ~ "Others",
+                           Origin == "HPV" ~ "Others",
+                           Origin == "unknown" ~ "Others",
+                           Origin == "VZV" ~ "Others",
+                           Origin == "HHV-6B" ~ "Others"))
+
 
 #plotting a log-fold-change graph
-project_data_raw %>% 
-  mutate(Sequence = fct_reorder(Sequence, HLA)) %>%  
-  ggplot(aes(x = Sequence, y = log_fold_change)) +
-  geom_point(data = pointsabovelogfold2, color = "red", aes_string(size = 'p', alpha = 0.75)) +
-  geom_point(data = pointsbelowlogfold2, color = "gray", size = 0.1) +
+# integrate different sizes of dots dependent on log fold change 2
+project_data_raw_aug %>% 
+  ggplot(aes(x = Peptide, y = log_fold_change)) +
+  facet_grid(.~newID) +
+  geom_point() +
   geom_hline(yintercept = 2, 
              linetype = "dashed") +
   scale_y_continuous(limits = c(0, 
@@ -46,17 +67,19 @@ project_data_raw %>%
                      breaks = seq(0, 
                                   maximum_y, 
                                   2)) +
-  labs(title = "Log-fold change vs sequence", 
-       x = "Sequence", 
-       y = "Log-fold change") +
-  theme(plot.title = element_text(hjust = 0.5), 
-        text = element_text(size = 13, 
-                            face = "bold"),
+  theme(plot.title = element_text(size = 12, 
+                                  hjust = 0.5),
         axis.text.x = element_text(size = 4,
                                    angle = 45, 
                                    vjust = 0.5, 
-                                   hjust = 1))
+                                   hjust = 1),
+        axis.title.x = element_text(size = 10),
+        axis.title.y = element_text(size = 10)) +
+  labs(x = "Sequence", 
+       y = "Log-fold change",
+       title = "Log-fold change vs sequence")
 
 # Write data --------------------------------------------------------------
-write_tsv(...)
-ggsave(...)
+ggsave(filename = "/cloud/project/results/log-fold change.png", 
+       plot = plot,
+       device = "png")
