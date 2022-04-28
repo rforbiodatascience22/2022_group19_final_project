@@ -24,7 +24,7 @@ plot <- project_data %>%
              space = "free") +
   scale_fill_gradient2(low = "red", 
                        mid = "white", 
-                       high = "red") +
+                       high = "darkgreen") +
   labs(x = "Sample", 
        y = "Peptide", 
        title = "Awesome title", 

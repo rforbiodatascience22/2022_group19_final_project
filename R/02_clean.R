@@ -1,19 +1,25 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 
-
-# Define functions --------------------------------------------------------
-source(file = "R/99_project_functions.R")
-
-
 # Load data ---------------------------------------------------------------
-my_data <- read_tsv(file = "data/01_my_data.tsv")
 
+project_data <- read_csv(file = "data/01_project_data.csv")
 
 # Wrangle data ------------------------------------------------------------
-my_data_clean <- my_data # %>% ...
+project_data <- project_data %>%
+  filter(p < 0.01 & log_fold_change > 0 & input.1 > 50 & input.2 > 50 & input.3 > 50) %>%
+  mutate(id = paste0(Peptide, " (", Origin, ")")) %>%
+  select("barcode", 
+         "sample", 
+         "log_fold_change", 
+         "p", 
+         "HLA", 
+         "Origin", 
+         "Peptide", 
+         "Sequence",
+         "id")
 
 
 # Write data --------------------------------------------------------------
-write_tsv(x = my_data_clean,
-          file = "data/02_my_data_clean.tsv")
+write_csv(x = project_data,
+          file = "data/02_project_data_clean.csv")
