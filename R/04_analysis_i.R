@@ -19,14 +19,7 @@ maximum_y = project_data_raw %>%
   max() %>% 
   round() + 0.5
 
-#filtering the interesting plots
-pointsabovelogfold2 = project_data_raw %>% 
-  filter(log_fold_change > 2)
-
-#filtering all the uninteresting plots
-pointsbelowlogfold2 = project_data_raw %>% 
-  filter(log_fold_change < 2)
-
+#Determining the numbers of sequences per virus strain (Origin)
 project_data_raw %>% 
   select(Origin) %>% 
   count(Origin)
@@ -51,15 +44,23 @@ project_data_raw_aug = project_data_raw %>%
                            Origin == "HPV" ~ "Others",
                            Origin == "unknown" ~ "Others",
                            Origin == "VZV" ~ "Others",
-                           Origin == "HHV-6B" ~ "Others"))
+                           Origin == "HHV-6B" ~ "Others")) %>% 
+  mutate(value = case_when(log_fold_change <= 2 ~ 0,
+                           0.001 <= p & log_fold_change >= 2 ~ 1,
+                           0.001 >= p & log_fold_change >= 2 ~ 2,
+                           0.0001 >= p & log_fold_change >= 2 ~ 3))
 
-
+project_data_raw_aug %>% 
+  select(value) %>% 
+  count(value)
 #plotting a log-fold-change graph
 # integrate different sizes of dots dependent on log fold change 2
 project_data_raw_aug %>% 
   ggplot(aes(x = Peptide, y = log_fold_change)) +
-  facet_grid(.~newID) +
-  geom_point() +
+  facet_grid(.~newID,
+             scales = "free_x", 
+             space = "free") +
+  geom_point(aes_string(size ="value", alpha = 0.75)) +
   geom_hline(yintercept = 2, 
              linetype = "dashed") +
   scale_y_continuous(limits = c(0, 
@@ -67,17 +68,21 @@ project_data_raw_aug %>%
                      breaks = seq(0, 
                                   maximum_y, 
                                   2)) +
-  theme(plot.title = element_text(size = 12, 
+  theme(legend.position="none",
+        plot.title = element_text(size = 12, 
                                   hjust = 0.5),
         axis.text.x = element_text(size = 4,
-                                   angle = 45, 
+                                   angle = 90, 
                                    vjust = 0.5, 
                                    hjust = 1),
         axis.title.x = element_text(size = 10),
         axis.title.y = element_text(size = 10)) +
   labs(x = "Sequence", 
        y = "Log-fold change",
-       title = "Log-fold change vs sequence")
+       title = "Log-fold change vs sequence") +
+  scale_fill_gradient2(low = "red", 
+                       mid = "white", 
+                       high = "darkgreen")
 
 # Write data --------------------------------------------------------------
 ggsave(filename = "/cloud/project/results/log-fold change.png", 
