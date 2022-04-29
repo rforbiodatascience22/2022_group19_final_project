@@ -2,13 +2,10 @@
 library("tidyverse")
 
 # Load data ---------------------------------------------------------------
-<<<<<<< HEAD
 # remove some of the uninteresting columns in the spreadsheet to clean it up.
 my_data <- read_tsv(file = "data/01_my_data.tsv")
 
-=======
 project_data <- read_csv(file = "data/01_project_data.csv")
->>>>>>> 69a7675415342d3b545b928a31170e4e115e2c81
 
 # Wrangle data ------------------------------------------------------------
 project_data_clean <- project_data %>%
