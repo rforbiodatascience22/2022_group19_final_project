@@ -1,19 +1,17 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-
-
-# Define functions --------------------------------------------------------
-source(file = "R/99_project_functions.R")
-
+library("readxl")
 
 # Load data ---------------------------------------------------------------
-project_data_raw <- read_csv2(file = "data/_raw/project_data_raw.csv")
+# Accessing all excel sheets 
+sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
 
-
-# Wrangle data ------------------------------------------------------------
-project_data <- project_data_raw # %>% ...
-
+# Applying sheet names to dataframe names
+data_frame <- lapply(setNames(sheet, sheet), 
+                       function(x) read_excel("data/_raw/project_data_raw.xlsx", sheet = x))
+# Attaching all dataframes together
+data_frame <- bind_rows(data_frame, .id = "Sheet")
 
 # Write data --------------------------------------------------------------
-write_tsv(x = project_data,
-          file = "data/01_my_data.tsv")
+write_csv(x = data_frame,
+          file = "data/01_project_data.csv")
