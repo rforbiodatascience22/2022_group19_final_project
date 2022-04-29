@@ -25,6 +25,7 @@ project_data_raw %>%
   count(Origin)
 
 #pooling all groups of vira with less than 100 hits into HHV or Others
+#undgå hard-coding her - ifelse statement måske.
 project_data_raw_aug = project_data_raw %>% 
   mutate(newID = case_when(Origin == "CMV" ~ "CMV",
                            Origin == "Covid-19" ~ "Covid-19",
@@ -58,7 +59,7 @@ project_data_raw_aug %>%
 project_data_raw_aug %>% 
   ggplot(aes(x = Peptide, y = log_fold_change)) +
   facet_grid(.~newID,
-             scales = "free_x", 
+             scales = "free_x",
              space = "free") +
   geom_point(aes_string(size ="value", alpha = 0.75)) +
   geom_hline(yintercept = 2, 
@@ -72,7 +73,7 @@ project_data_raw_aug %>%
         plot.title = element_text(size = 12, 
                                   hjust = 0.5),
         axis.text.x = element_text(size = 4,
-                                   angle = 90, 
+                                   angle = 45, 
                                    vjust = 0.5, 
                                    hjust = 1),
         axis.title.x = element_text(size = 10),
