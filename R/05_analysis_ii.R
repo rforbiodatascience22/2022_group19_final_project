@@ -1,6 +1,7 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 library(stringr)
+library(usethis)
 
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
@@ -103,7 +104,7 @@ my_data_clean_aug %>% ...
 
 
 
-
+usethis
 
 # Visualise data ----------------------------------------------------------
 my_data_clean_aug %>% ...
