@@ -13,7 +13,7 @@ my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
 # Wrangle data ------------------------------------------------------------
 
 #finding maximum to determine the range of the axis on the plot
-maximum_y = my_data_clean_aug %>% 
+maximum_y <- my_data_clean_aug %>% 
   pull(log_fold_change) %>% 
   max() %>% 
   round() + 0.5
@@ -24,8 +24,7 @@ my_data_clean_aug %>%
   count(Origin)
 
 #pooling all groups of vira with less than 50 hits into HHV or Others
-#undgå hard-coding her - ifelse statement måske.
-my_data_clean_aug_pooling = my_data_clean_aug %>% 
+my_data_clean_aug_pooling <- my_data_clean_aug %>% 
   mutate(newID = case_when(Origin == "CMV" ~ "CMV",
                            Origin == "Covid-19" ~ "Covid-19",
                            Origin == "hCoV" ~ "hCoV",
@@ -49,17 +48,19 @@ my_data_clean_aug_pooling = my_data_clean_aug %>%
                            0.001 < p & log_fold_change >= 2 ~ 0,
                            0.001 >= p & log_fold_change >= 2 ~ 1))
 
-pointsofinterest = my_data_clean_aug_pooling %>% 
+pointsofinterest <- my_data_clean_aug_pooling %>% 
   filter(0.001 >= p & log_fold_change >= 2)
 
 #plotting a log-fold-change graph
 my_data_clean_aug_pooling %>% 
-  ggplot(aes(x = Peptide, y = log_fold_change)) +
+  ggplot(aes(x = Peptide, 
+             y = log_fold_change)) +
   facet_grid(.~newID,
              scales = "free_x",
              space = "free") +
   geom_point(aes_string(size = "value")) +
-  geom_point(data = pointsofinterest, color = "red") +
+  geom_point(data = pointsofinterest, 
+             color = "red") +
   geom_hline(yintercept = 2, 
              linetype = "dashed") +
   scale_y_continuous(limits = c(0, 

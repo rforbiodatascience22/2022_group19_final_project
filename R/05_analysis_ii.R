@@ -38,7 +38,8 @@ donor_response_database <- donor_response_database %>%
 
 
 
-df <- data.frame(matrix(ncol = length(donors), nrow = nrow(donor_response_database)))
+df <- data.frame(matrix(ncol = length(donors), 
+                        nrow = nrow(donor_response_database)))
 
 colnames(df) <- donors
 
@@ -59,7 +60,8 @@ str_match(unique_sequence,toString(donor_response_database[20,4]))
 string_peptides <- donor_response_database$sequence
 
 
-new_vector <- str_match(string_peptides,toString(unique_sequence[2]))
+new_vector <- str_match(string_peptides,
+                        toString(unique_sequence[2]))
 
 df[,1] <- new_vector
 
