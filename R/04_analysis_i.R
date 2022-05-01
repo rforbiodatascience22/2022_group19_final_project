@@ -50,6 +50,9 @@ project_data_raw_aug = project_data_raw %>%
                            0.001 < p & log_fold_change >= 2 ~ 0,
                            0.001 >= p & log_fold_change >= 2 ~ 1))
 
+pointsofinterest = project_data_raw_aug %>% 
+  filter(0.001 >= p & log_fold_change >= 2)
+
 project_data_raw_aug %>% 
   select(value) %>% 
   count(value)
@@ -60,7 +63,8 @@ project_data_raw_aug %>%
   facet_grid(.~newID,
              scales = "free_x",
              space = "free") +
-  geom_point(aes_string(size ="value")) +
+  geom_point(aes_string(size = "value")) +
+  geom_point(data = pointsofinterest, color = "red") +
   geom_hline(yintercept = 2, 
              linetype = "dashed") +
   scale_y_continuous(limits = c(0, 
