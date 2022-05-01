@@ -47,21 +47,20 @@ project_data_raw_aug = project_data_raw %>%
                            Origin == "VZV" ~ "Others",
                            Origin == "HHV-6B" ~ "Others")) %>% 
   mutate(value = case_when(log_fold_change <= 2 ~ 0,
-                           0.001 <= p & log_fold_change >= 2 ~ 1,
-                           0.001 >= p & log_fold_change >= 2 ~ 2,
-                           0.0001 >= p & log_fold_change >= 2 ~ 3))
+                           0.001 < p & log_fold_change >= 2 ~ 0,
+                           0.001 >= p & log_fold_change >= 2 ~ 1))
 
 project_data_raw_aug %>% 
   select(value) %>% 
   count(value)
+
 #plotting a log-fold-change graph
-# integrate different sizes of dots dependent on log fold change 2
 project_data_raw_aug %>% 
   ggplot(aes(x = Peptide, y = log_fold_change)) +
   facet_grid(.~newID,
              scales = "free_x",
              space = "free") +
-  geom_point(aes_string(size ="value", alpha = 0.75)) +
+  geom_point(aes_string(size ="value")) +
   geom_hline(yintercept = 2, 
              linetype = "dashed") +
   scale_y_continuous(limits = c(0, 
@@ -69,23 +68,23 @@ project_data_raw_aug %>%
                      breaks = seq(0, 
                                   maximum_y, 
                                   2)) +
-  theme(legend.position="none",
-        plot.title = element_text(size = 12, 
-                                  hjust = 0.5),
+  theme(legend.position = "none",
+        plot.title = element_text(size = 10, 
+                                  hjust = 0.5,
+                                  face = "bold"),
         axis.text.x = element_text(size = 4,
-                                   angle = 45, 
+                                   angle = 90, 
                                    vjust = 0.5, 
                                    hjust = 1),
-        axis.title.x = element_text(size = 10),
-        axis.title.y = element_text(size = 10)) +
-  labs(x = "Sequence", 
+        axis.title.x = element_text(size = 8),
+        axis.title.y = element_text(size = 8)) +
+  labs(x = "ID", 
        y = "Log-fold change",
        title = "Log-fold change vs sequence") +
-  scale_fill_gradient2(low = "red", 
-                       mid = "white", 
-                       high = "darkgreen")
+  scale_size(range = c(0.1,1))
 
 # Write data --------------------------------------------------------------
-ggsave(filename = "/cloud/project/results/log-fold change.png", 
-       plot = plot,
+ggsave(filename = "/cloud/project/results/log-fold change.png",
+       width = 10, 
+       height = 7,
        device = "png")
