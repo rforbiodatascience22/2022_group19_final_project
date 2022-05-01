@@ -7,26 +7,25 @@ source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-my_data_clean_aug <- read_tsv(file = "data/03_my_data_clean_aug.tsv")
+my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
 
 # Wrangle data ------------------------------------------------------------
-my_data_clean_aug %>% ...
 
 #finding maximum to determine the range of the axis on the plot
-maximum_y = project_data_raw %>% 
+maximum_y = my_data_clean_aug %>% 
   pull(log_fold_change) %>% 
   max() %>% 
   round() + 0.5
 
 #Determining the numbers of sequences per virus strain (Origin)
-project_data_raw %>% 
+my_data_clean_aug %>% 
   select(Origin) %>% 
   count(Origin)
 
-#pooling all groups of vira with less than 100 hits into HHV or Others
+#pooling all groups of vira with less than 50 hits into HHV or Others
 #undgå hard-coding her - ifelse statement måske.
-project_data_raw_aug = project_data_raw %>% 
+my_data_clean_aug_pooling = my_data_clean_aug %>% 
   mutate(newID = case_when(Origin == "CMV" ~ "CMV",
                            Origin == "Covid-19" ~ "Covid-19",
                            Origin == "hCoV" ~ "hCoV",
@@ -50,15 +49,11 @@ project_data_raw_aug = project_data_raw %>%
                            0.001 < p & log_fold_change >= 2 ~ 0,
                            0.001 >= p & log_fold_change >= 2 ~ 1))
 
-pointsofinterest = project_data_raw_aug %>% 
+pointsofinterest = my_data_clean_aug_pooling %>% 
   filter(0.001 >= p & log_fold_change >= 2)
 
-project_data_raw_aug %>% 
-  select(value) %>% 
-  count(value)
-
 #plotting a log-fold-change graph
-project_data_raw_aug %>% 
+my_data_clean_aug_pooling %>% 
   ggplot(aes(x = Peptide, y = log_fold_change)) +
   facet_grid(.~newID,
              scales = "free_x",

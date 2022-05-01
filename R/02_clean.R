@@ -3,14 +3,13 @@ library("tidyverse")
 
 # Load data ---------------------------------------------------------------
 # remove some of the uninteresting columns in the spreadsheet to clean it up.
-my_data <- read_tsv(file = "data/01_my_data.tsv")
+my_data <- read_csv(file = "data/01_project_data.csv")
 
 project_data <- read_csv(file = "data/01_project_data.csv")
 
 # Wrangle data ------------------------------------------------------------
 project_data_clean <- project_data %>%
-  filter(p < 0.01 
-         & log_fold_change > 0 
+  filter(log_fold_change > 0 
          & input.1 > 50 
          & input.2 > 50 
          & input.3 > 50) %>%
