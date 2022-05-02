@@ -4,7 +4,7 @@ library(stringr)
 library(usethis)
 
 # Define functions --------------------------------------------------------
-source(file = "R/99_project_functions.R")
+#source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------

@@ -2,9 +2,8 @@
 library("tidyverse")
 
 # Load data ---------------------------------------------------------------
-# remove some of the uninteresting columns in the spreadsheet to clean it up.
-my_data <- read_csv(file = "data/01_project_data.csv")
 
+# remove some of the uninteresting columns in the spreadsheet to clean it up.
 project_data <- read_csv(file = "data/01_project_data.csv")
 
 # Wrangle data ------------------------------------------------------------

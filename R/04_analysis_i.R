@@ -3,7 +3,7 @@ library("tidyverse")
 
 
 # Define functions --------------------------------------------------------
-source(file = "R/99_project_functions.R")
+#source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
@@ -84,7 +84,7 @@ my_data_clean_aug_pooling %>%
   scale_size(range = c(0.1,1))
 
 # Write data --------------------------------------------------------------
-ggsave(filename = "/cloud/project/results/log-fold change.png",
+ggsave(filename = "/cloud/project/results/04_dotplot.png",
        width = 10, 
        height = 7,
        device = "png")
