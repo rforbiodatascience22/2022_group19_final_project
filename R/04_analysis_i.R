@@ -23,7 +23,7 @@ threshold <- my_data_clean_aug %>%
   count() %>% 
   pull()
 
-#pooling all groups of vira with less than 50 hits into HHV or Others
+#Pooling all groups of vira with less than 50 hits into HHV or Others
 my_data_clean_aug_pooling <- my_data_clean_aug %>% 
   mutate(Origin = as.factor(Origin)) %>% 
   mutate(newID = fct_lump(Origin, threshold)) %>% 
@@ -32,10 +32,11 @@ my_data_clean_aug_pooling <- my_data_clean_aug %>%
                            0.001 >= p & log_fold_change >= 2 ~ 1))
 
 
+#Determining the datapoints that we want highlighted in the graph
 pointsofinterest <- my_data_clean_aug_pooling %>% 
   filter(0.001 >= p & log_fold_change >= 2)
 
-#plotting a log-fold-change graph
+#Plotting a log-fold-change graph
 my_data_clean_aug_pooling %>% 
   ggplot(aes(x = Peptide, 
              y = log_fold_change)) +
