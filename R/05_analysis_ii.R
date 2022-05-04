@@ -38,7 +38,7 @@ sequenses <- project_data_raw$Sequence
 
 
 unique_sequence <- unique(sequenses)
-
+usethis::use_git_config(user.name = "raulwe", user.email = raulwe@dtu.dk)
 
 my_name <- readline(prompt="Enter initials of person responsible for experiment: ")
 # print(my.name)
