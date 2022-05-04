@@ -5,26 +5,16 @@ log_fold_change_plotting <- function(my_data){
     max() %>% 
     round() + 0.5
   
+  threshold <- my_data_clean_aug %>% 
+    select(Origin) %>% 
+    count(Origin) %>% 
+    filter(n > 50) %>% 
+    count() %>% 
+    pull()
+  
   my_data_pooling <- my_data %>% 
-    mutate(newID = case_when(Origin == "CMV" ~ "CMV",
-                             Origin == "Covid-19" ~ "Covid-19",
-                             Origin == "hCoV" ~ "hCoV",
-                             Origin == "EBV" ~ "EBV",
-                             Origin == "FLU-A" ~ "FLU-A",
-                             Origin == "HHV-1" ~ "HHV",
-                             Origin == "HHV-2" ~ "HHV",
-                             Origin == "B19" ~ "Others",
-                             Origin == "HAdV-C" ~ "Others",
-                             Origin == "NWV" ~ "Others",
-                             Origin == "HIV-1" ~ "Others",
-                             Origin == "VACV" ~ "Others",
-                             Origin == "HMPV" ~ "Others",
-                             Origin == "BKPyV" ~ "Others",
-                             Origin == "JCPyV" ~ "Others",
-                             Origin == "HPV" ~ "Others",
-                             Origin == "unknown" ~ "Others",
-                             Origin == "VZV" ~ "Others",
-                             Origin == "HHV-6B" ~ "Others")) %>% 
+    mutate(Origin = as.factor(Origin)) %>% 
+    mutate(newID = fct_lump(Origin, threshold)) %>% 
     mutate(value = case_when(log_fold_change <= 2 ~ 0,
                              0.001 < p & log_fold_change >= 2 ~ 0,
                              0.001 >= p & log_fold_change >= 2 ~ 1))

@@ -1,6 +1,6 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-
+library("forcats")
 
 # Define functions --------------------------------------------------------
 #source(file = "R/99_project_functions.R")
@@ -19,34 +19,24 @@ maximum_y <- my_data_clean_aug %>%
   round() + 0.5
 
 #Determining the numbers of sequences per virus strain (Origin)
-my_data_clean_aug %>% 
+threshold <- my_data_clean_aug %>% 
   select(Origin) %>% 
-  count(Origin)
+  count(Origin) %>% 
+  filter(n > 50) %>% 
+  count() %>% 
+  pull()
 
 #pooling all groups of vira with less than 50 hits into HHV or Others
 my_data_clean_aug_pooling <- my_data_clean_aug %>% 
-  mutate(newID = case_when(Origin == "CMV" ~ "CMV",
-                           Origin == "Covid-19" ~ "Covid-19",
-                           Origin == "hCoV" ~ "hCoV",
-                           Origin == "EBV" ~ "EBV",
-                           Origin == "FLU-A" ~ "FLU-A",
-                           Origin == "HHV-1" ~ "HHV",
-                           Origin == "HHV-2" ~ "HHV",
-                           Origin == "B19" ~ "Others",
-                           Origin == "HAdV-C" ~ "Others",
-                           Origin == "NWV" ~ "Others",
-                           Origin == "HIV-1" ~ "Others",
-                           Origin == "VACV" ~ "Others",
-                           Origin == "HMPV" ~ "Others",
-                           Origin == "BKPyV" ~ "Others",
-                           Origin == "JCPyV" ~ "Others",
-                           Origin == "HPV" ~ "Others",
-                           Origin == "unknown" ~ "Others",
-                           Origin == "VZV" ~ "Others",
-                           Origin == "HHV-6B" ~ "Others")) %>% 
+  mutate(Origin = as.factor(Origin)) %>% 
+  mutate(newID = fct_lump(Origin, threshold)) %>% 
   mutate(value = case_when(log_fold_change <= 2 ~ 0,
                            0.001 < p & log_fold_change >= 2 ~ 0,
                            0.001 >= p & log_fold_change >= 2 ~ 1))
+
+my_data_clean_aug_pooling %>% 
+  select(newID) %>% 
+  count(newID)
 
 pointsofinterest <- my_data_clean_aug_pooling %>% 
   filter(0.001 >= p & log_fold_change >= 2)
