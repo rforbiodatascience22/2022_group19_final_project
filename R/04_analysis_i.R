@@ -1,10 +1,7 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
 library("forcats")
-
-# Define functions --------------------------------------------------------
-#source(file = "R/99_project_functions.R")
-
+library("ggplot2")
 
 # Load data ---------------------------------------------------------------
 my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
@@ -12,7 +9,7 @@ my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
 # Wrangle data ------------------------------------------------------------
 
-#finding maximum to determine the range of the axis on the plot
+#Finding maximum to determine the range of the axis on the plot
 maximum_y <- my_data_clean_aug %>% 
   pull(log_fold_change) %>% 
   max() %>% 
