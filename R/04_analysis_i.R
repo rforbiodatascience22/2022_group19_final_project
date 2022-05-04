@@ -23,6 +23,18 @@ my_data_clean_aug %>%
   select(Origin) %>% 
   count(Origin)
 
+threshold <- 50
+
+my_data_clean_aug %>% 
+  count(Origin)
+
+#my_data_clean_aug %>%
+#  count(fct_collapse(Origin, other_level = unique(Origin[n < threshold])), wt = n, name = "n1")
+
+#my_data_clean_aug %>%
+#  select(Origin) %>% 
+#  count(Originnew = fct_collapse(Origin), unique(as.character(Haplogroup)[n < threshold]), name = "n1")
+
 #pooling all groups of vira with less than 50 hits into HHV or Others
 my_data_clean_aug_pooling <- my_data_clean_aug %>% 
   mutate(newID = case_when(Origin == "CMV" ~ "CMV",
@@ -72,10 +84,13 @@ my_data_clean_aug_pooling %>%
         plot.title = element_text(size = 10, 
                                   hjust = 0.5,
                                   face = "bold"),
-        axis.text.x = element_text(size = 4,
+        axis.text.x = element_text(size = 5,
                                    angle = 90, 
-                                   vjust = 0.5, 
+                                   vjust = 0.5,
                                    hjust = 1),
+        strip.background = element_rect(fill = "white"),
+        panel.border = element_rect(colour = "black", 
+                                    fill = NA),
         axis.title.x = element_text(size = 8),
         axis.title.y = element_text(size = 8)) +
   labs(x = "ID", 
