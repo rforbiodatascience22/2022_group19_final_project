@@ -18,7 +18,7 @@ maximum_y <- my_data_clean_aug %>%
   max() %>% 
   round() + 0.5
 
-#Determining the numbers of sequences per virus strain (Origin)
+#Determining the numbers of sequences per virus strain (Origin) and setting a threshold.
 threshold <- my_data_clean_aug %>% 
   select(Origin) %>% 
   count(Origin) %>% 
@@ -34,9 +34,6 @@ my_data_clean_aug_pooling <- my_data_clean_aug %>%
                            0.001 < p & log_fold_change >= 2 ~ 0,
                            0.001 >= p & log_fold_change >= 2 ~ 1))
 
-my_data_clean_aug_pooling %>% 
-  select(newID) %>% 
-  count(newID)
 
 pointsofinterest <- my_data_clean_aug_pooling %>% 
   filter(0.001 >= p & log_fold_change >= 2)
