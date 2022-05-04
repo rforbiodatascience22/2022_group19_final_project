@@ -4,7 +4,7 @@ library(stringr)
 library(usethis)
 library(dplyr)
 # Define functions --------------------------------------------------------
-source(file = "R/99_project_functions.R")
+#source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
@@ -28,7 +28,12 @@ data/03_project_data_clean_aug.csv
 
 # Wrangle data ------------------------------------------------------------
 
+<<<<<<< HEAD
 n <- nrow(donor_response_database)
+=======
+df <- data.frame(matrix(ncol = length(donors), 
+                        nrow = nrow(donor_response_database)))
+>>>>>>> f792de0d77ec9c286a1af2e8c3cec2f9be4a1d1d
 
 donor_response_database <- donors[1]
 
@@ -71,6 +76,11 @@ string_peptides <- pull(donor_response_database, sequence)
 string_peptides
 new_vector <- str_match(string_peptides,toString(unique_sample[2]))
 
+<<<<<<< HEAD
+=======
+new_vector <- str_match(string_peptides,
+                        toString(unique_sequence[2]))
+>>>>>>> f792de0d77ec9c286a1af2e8c3cec2f9be4a1d1d
 
 df[,1] <- new_vector
 
