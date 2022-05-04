@@ -2,45 +2,35 @@
 library("tidyverse")
 library(stringr)
 library(usethis)
-
+library(dplyr)
 # Define functions --------------------------------------------------------
 source(file = "R/99_project_functions.R")
 
 
 # Load data ---------------------------------------------------------------
-project_data_raw <- read_csv2(file = "data/_raw/project_data_raw.csv")
-donor_response_database <- read_csv2(file = "data/_raw/Copy of Buffycoat Virus-screen Overview r course.csv")
+
+
+my_path_donor_response_database <- readline(prompt="insert path for donor response database excel sheet: ")
+
+donor_response_database <- read_csv2(file = my_path_donor_response_database)
+
+#data/_raw/Copy of Buffycoat Virus-screen Overview r course.csv
+
+
+
+my_path_new_screen <- readline(prompt="insert path for new donor screen: ")
+
+project_data_screen <- read_csv(file = my_path_new_screen)
+
+data/03_project_data_clean_aug.csv
+
+
 
 # Wrangle data ------------------------------------------------------------
-my.name <- readline(prompt="Enter initials of person responsible for experiment: ")
-# print(my.name)
-
-
-unique_samples <- unique(project_data_raw$sample)
-donors <- str_subset(unique_samples,"NT", negate=TRUE)
-
 
 n <- nrow(donor_response_database)
 
 donor_response_database <- donors[1]
-
-donor_response_database <- donor_response_database %>% 
-  rename(
-    HLA = ...2,
-    origen = ...3,
-    sequence = ...4
-  )
-
-
-
-
-
-
-
-
-df <- data.frame(matrix(ncol = length(donors), nrow = nrow(donor_response_database)))
-
-colnames(df) <- donors
 
 donor_response_database[20,4]
 
@@ -50,16 +40,37 @@ sequenses <- project_data_raw$Sequence
 unique_sequence <- unique(sequenses)
 
 
+my_name <- readline(prompt="Enter initials of person responsible for experiment: ")
+# print(my.name)
 
+
+#Adds appropriate names to the database sheet 
+donor_response_database <- donor_response_database %>% 
+  rename(
+    HLA = ...2,
+    origen = ...3,
+    sequence = ...4
+  )
+
+#Creates vector with unique donors
+sample_names <- pull(project_data_screen , sample) %>% 
+unique_sample <- unique(sample_names) %>% 
+donors <- str_subset(unique_sample,"NT", negate=TRUE)
+
+#Creates new empty dataframe based on amount of donor samples and variables in response database 
+new_dataframe <- data.frame(matrix(ncol = length(donors),
+                        nrow = nrow(donor_response_database)))
+colnames(new_dataframe) <- donors
 
 
 str_match(unique_sequence,toString(donor_response_database[20,4]))
 
 
-string_peptides <- donor_response_database$sequence
+string_peptides <- pull(donor_response_database, sequence)
 
+string_peptides
+new_vector <- str_match(string_peptides,toString(unique_sample[2]))
 
-new_vector <- str_match(string_peptides,toString(unique_sequence[2]))
 
 df[,1] <- new_vector
 
@@ -102,9 +113,6 @@ for (i in project_data_raw$log_fold_change){
 project_data_raw$sample[i],
 my_data_clean_aug %>% ...
 
-
-
-usethis
 
 # Visualise data ----------------------------------------------------------
 my_data_clean_aug %>% ...
