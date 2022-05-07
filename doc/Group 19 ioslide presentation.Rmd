@@ -54,7 +54,7 @@ data_frame <- lapply(setNames(sheet, sheet),
 data_frame <- bind_rows(data_frame, 
                         .id = "Sheet")
 
-```{r}
+```{r, echo = F}
 # Load data ---------------------------------------------------------------
 # Set working directory
 setwd("/cloud/project")

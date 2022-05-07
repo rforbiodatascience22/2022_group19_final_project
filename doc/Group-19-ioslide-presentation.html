@@ -3252,26 +3252,6 @@ test</pre>
 
 <p>data_frame &lt;- bind_rows(data_frame, .id = &ldquo;Sheet&rdquo;)</p>
 
-<pre class = 'prettyprint lang-r'># Load data ---------------------------------------------------------------
-# Set working directory
-setwd(&quot;/cloud/project&quot;)
-
-# Accessing all excel sheets 
-sheet &lt;- excel_sheets(&quot;data/_raw/project_data_raw.xlsx&quot;)
-
-# Applying sheet names to dataframe names
-data_frame &lt;- lapply(setNames(sheet, sheet), 
-                       function(x) read_excel(&quot;data/_raw/project_data_raw.xlsx&quot;, sheet = x))
-
-# Attaching all dataframes together
-data_frame &lt;- bind_rows(data_frame, 
-                        .id = &quot;Sheet&quot;)
-
-# Write data --------------------------------------------------------------
-write_csv(x = data_frame,
-          file = &quot;data/01_project_data.csv&quot;)
-data_frame</pre>
-
 <pre >## # A tibble: 1,770 × 18
 ##    Sheet barcode sample count.1 input.1 input.2 input.3 log_fold_change     p
 ##    &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;    &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;           &lt;dbl&gt; &lt;dbl&gt;
