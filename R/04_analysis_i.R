@@ -69,7 +69,8 @@ my_data_clean_aug_pooling %>%
         panel.border = element_rect(colour = "black", 
                                     fill = NA),
         axis.title.x = element_text(size = 8),
-        axis.title.y = element_text(size = 8)) +
+        axis.title.y = element_text(size = 8),
+        plot.background = element_rect(fill = "transparent", color = NA)) +
   labs(x = "ID", 
        y = "Log-fold change",
        title = "Log-fold change vs sequence") +

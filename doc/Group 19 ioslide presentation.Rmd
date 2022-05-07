@@ -5,48 +5,55 @@ date: '2022-05-07'
 output: ioslides_presentation
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
-
-## R Markdown
-
-Text
-
-## Slide with Bullets
-
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
-```
-
-## Loading data
-
-```{r}
-# Load libraries ----------------------------------------------------------
+```{r, include = FALSE}
+# Load libraries 
 suppressPackageStartupMessages(library("tidyverse"))
 library("readxl")
 library("rmarkdown")
 library("knitr")
 ```
 
-![Raw excel file with several sheets](images/project_data_raw.png){width=100%}
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
 
-## Loading data - merging sheets{.smaller}
+
+
+
+## Project data
+
+![](images/project_data_explained.png){width=80%}
+
+
+
+
+
+## Project data
+
+![Raw excel file with several sheets](images/project_data_raw.png){width=90%}
+
+
+
+
+
+
+## Loading data{.smaller}
 
 read_excel("data/_raw/project_data_raw.xlsx")
 
 ```{r}
 setwd("/cloud/project")
+
 test <- read_excel("data/_raw/project_data_raw.xlsx")
 
 test
 ```
+
+
+
+
+
+
 
 
 ## Loading data - merging sheets{.smaller}
@@ -84,9 +91,29 @@ data_frame
 ```
 
 
+
+
+
+
+
+
+
+
+
 ## Slide with Plot
 
-```{r pressure}
-plot(pressure)
-```
+![Awesome title](/cloud/project/results/04_dotplot.png){width=100%}
+
+
+
+
+
+
+
+
+
+## Slide with Plot{.centered}
+
+![Awesome title](/cloud/project/results/05_heatmap.png){width=40%}
+
 
