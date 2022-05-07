@@ -17,12 +17,11 @@ donor_response_database <- read_csv2(file = my_path_donor_response_database)
 #data/_raw/Copy of Buffycoat Virus-screen Overview r course.csv
 
 
-
 my_path_new_screen <- readline(prompt="insert path for new donor screen: ")
 
 project_data_screen <- read_csv(file = my_path_new_screen)
 
-data/03_project_data_clean_aug.csv
+#data/03_project_data_clean_aug.csv
 
 
 
@@ -35,15 +34,6 @@ df <- data.frame(matrix(ncol = length(donors),
                         nrow = nrow(donor_response_database)))
 >>>>>>> f792de0d77ec9c286a1af2e8c3cec2f9be4a1d1d
 
-donor_response_database <- donors[1]
-
-donor_response_database[20,4]
-
-sequenses <- project_data_raw$Sequence
-
-
-unique_sequence <- unique(sequenses)
-usethis::use_git_config(user.name = "raulwe", user.email = raulwe@dtu.dk)
 
 my_name <- readline(prompt="Enter initials of person responsible for experiment: ")
 # print(my.name)
@@ -58,8 +48,8 @@ donor_response_database <- donor_response_database %>%
   )
 
 #Creates vector with unique donors
-sample_names <- pull(project_data_screen , sample) %>% 
-unique_sample <- unique(sample_names) %>% 
+sample_names <- pull(project_data_screen , sample)
+unique_sample <- unique(sample_names)
 donors <- str_subset(unique_sample,"NT", negate=TRUE)
 
 #Creates new empty dataframe based on amount of donor samples and variables in response database 
@@ -67,61 +57,53 @@ new_dataframe <- data.frame(matrix(ncol = length(donors),
                         nrow = nrow(donor_response_database)))
 colnames(new_dataframe) <- donors
 
-
-str_match(unique_sequence,toString(donor_response_database[20,4]))
-
+project_data_screen <- filter(project_data_screen, log_fold_change>2)
 
 string_peptides <- pull(donor_response_database, sequence)
+donor_responses <- pull(project_data_screen, Sequence)
 
-string_peptides
-new_vector <- str_match(string_peptides,toString(unique_sample[2]))
+str_match(string_peptides,donor_responses[5])
 
-<<<<<<< HEAD
-=======
-new_vector <- str_match(string_peptides,
-                        toString(unique_sequence[2]))
->>>>>>> f792de0d77ec9c286a1af2e8c3cec2f9be4a1d1d
-
-df[,1] <- new_vector
+sequences <- pull(project_data_screen, Sequence)
 
 
-count <- 0
-
-for (i in length(project_data_raw)){
-  if (project_data_raw$log_fold_change > 2){
-  print(paste("The year is", i))}
-}
-
-for (i in project_data_raw$log_fold_change){
-  count <- count+1
-  
-  if (i > 2){
-    count <- count+1
-    new_data_set[,count] <-c(project_data_raw$sample[i],project_data_raw$sequnce[i],i)
-    print(project_data_raw$sample[i])
-    print(i)
-    print(count)
-  }
-}
+sequence_matches <- match(sequences,string_peptides)
 
 
-new_dataset <-matrix(ncol=3)
-new_dataset[,1] <- c(project_data_raw$sample[2],project_data_raw$Sequnce[2],2)
+project_data_screen_matches <-mutate(project_data_screen, sequence_matches)
 
-for (i in project_data_raw$log_fold_change){
-  count <- count+1
-  
-  if (i > 2){
-    count <- count+1
-    new_dataset[,count] <- c(project_data_raw$sample[i],project_data_raw$Sequnce[i],i)
-    
-  }
-}
+test <- pivot_wider(project_data_screen, names_from = sample,
+                    values_from = sequence_matches)
+
+
+all_responses <- filter(project_data_screen_matches, sequence_matches != "NA")
+
+test <- pivot_wider(all_responses, names_from = sample,
+                    values_from = sequence_matches)
+
+test2 <-select(all_responses, sample, Sequence, sequence_matches, log_fold_change)
+
+test3 <-pivot_wider(test2, names_from = sample, values_from = log_fold_change)
+
+
+test4 <- new_dataframe %>%
+tibble::rownames_to_column()
+
+test4 <- rename(test4, sequence_matches=rowname)
+
+
+test5 <- merge(test3, test4, by="sequence_matches", all=T) %>%
+arrange(sequence_matches)
 
 
 
-project_data_raw$sample[i],
-my_data_clean_aug %>% ...
+final_file <- bind_cols(donor_response_database,test5)
+
+
+
+
+
+#sequncematches i new dataframe  merche( data, data, by = sequnence_matches, all = true)
 
 
 # Visualise data ----------------------------------------------------------
