@@ -22,9 +22,6 @@ project_data_screen <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
 # Wrangle data ------------------------------------------------------------
 
-my_name <- readline(prompt="Enter initials of person responsible for experiment: ")
-# print(my.name)
-
 
 #Adds appropriate names to the database sheet 
 donor_response_database <- donor_response_database %>% 
