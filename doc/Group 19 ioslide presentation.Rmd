@@ -92,12 +92,19 @@ data_frame
 
 
 
+## Flow chart or flowchart
 
 
+## Wrangling of data
 
+project_data_clean <- project_data %>%
+  filter(log_fold_change > 0 
+         & input.1 > 50 
+         & input.2 > 50 
+         & input.3 > 50)
 
-
-
+project_data_clean_aug <- project_data_clean %>%
+  mutate(id = paste0(Peptide, " (", Origin, ")"))
 
 
 ## Slide with Plot
