@@ -27,14 +27,6 @@ project_data_screen <- read_csv(file = my_path_new_screen)
 
 # Wrangle data ------------------------------------------------------------
 
-<<<<<<< HEAD
-n <- nrow(donor_response_database)
-=======
-df <- data.frame(matrix(ncol = length(donors), 
-                        nrow = nrow(donor_response_database)))
->>>>>>> f792de0d77ec9c286a1af2e8c3cec2f9be4a1d1d
-
-
 my_name <- readline(prompt="Enter initials of person responsible for experiment: ")
 # print(my.name)
 
@@ -113,5 +105,8 @@ my_data_clean_aug %>% ...
 
 
 # Write data --------------------------------------------------------------
-write_tsv(...)
+
+
+write_csv(x = final_file,  "results/06_append_database.csv")
+
 ggsave(...)
