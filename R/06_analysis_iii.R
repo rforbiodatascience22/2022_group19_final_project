@@ -9,7 +9,6 @@ library(dplyr)
 
 # Load data ---------------------------------------------------------------
 
-
 my_path_donor_response_database <- readline(prompt="insert path for donor response database excel sheet: ")
 
 donor_response_database <- read_csv2(file = my_path_donor_response_database)
@@ -26,14 +25,6 @@ project_data_screen <- read_csv(file = my_path_new_screen)
 
 
 # Wrangle data ------------------------------------------------------------
-
-<<<<<<< HEAD
-n <- nrow(donor_response_database)
-=======
-df <- data.frame(matrix(ncol = length(donors), 
-                        nrow = nrow(donor_response_database)))
->>>>>>> f792de0d77ec9c286a1af2e8c3cec2f9be4a1d1d
-
 
 my_name <- readline(prompt="Enter initials of person responsible for experiment: ")
 # print(my.name)
@@ -88,7 +79,7 @@ test3 <-pivot_wider(test2, names_from = sample, values_from = log_fold_change)
 
 
 test4 <- new_dataframe %>%
-tibble::rownames_to_column()
+  tibble::rownames_to_column()
 
 test4 <- rename(test4, sequence_matches=rowname)
 
@@ -96,7 +87,7 @@ test4 <- rename(test4, sequence_matches=rowname)
 
 
 test5 <- merge(test3, test4, by="sequence_matches", all=T) %>%
-arrange(sequence_matches) 
+  arrange(sequence_matches) 
 
 test5 <- select(test5, -sequence_matches, -Sequence, -last_col()) 
 
@@ -108,10 +99,7 @@ final_file <- bind_cols(donor_response_database,test5)
 #sequncematches i new dataframe  merche( data, data, by = sequnence_matches, all = true)
 
 
-# Visualise data ----------------------------------------------------------
-my_data_clean_aug %>% ...
-
-
 # Write data --------------------------------------------------------------
-write_tsv(...)
-ggsave(...)
+
+
+write_csv(x = final_file,  "results/06_append_database.csv")
