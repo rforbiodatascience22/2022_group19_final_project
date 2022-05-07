@@ -4,6 +4,8 @@ library("readxl")
 
 # Load data ---------------------------------------------------------------
 
+test <- read_excel("data/_raw/project_data_raw.xlsx")
+
 # Accessing all excel sheets 
 sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
 
