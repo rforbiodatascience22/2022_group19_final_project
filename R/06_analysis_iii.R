@@ -21,7 +21,7 @@ project_data_screen <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
 
 # Wrangle data ------------------------------------------------------------
-
+usethis::use_git_config(user.name = "ACakeLover", user.email = "mirahan@dtu.dk")
 
 #Adds appropriate names to the database sheet 
 donor_response_database <- donor_response_database %>% 
