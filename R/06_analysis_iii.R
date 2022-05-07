@@ -9,19 +9,15 @@ library(dplyr)
 
 # Load data ---------------------------------------------------------------
 
-my_path_donor_response_database <- readline(prompt="insert path for donor response database excel sheet: ")
+#my_path_donor_response_database <- readline(prompt="insert path for donor response database excel sheet: ")
 
-donor_response_database <- read_csv2(file = my_path_donor_response_database)
-
-#data/_raw/Copy of Buffycoat Virus-screen Overview r course.csv
+donor_response_database <- read_csv2(file = "data/_raw/Copy of Buffycoat Virus-screen Overview r course.csv")
 
 
-my_path_new_screen <- readline(prompt="insert path for new donor screen: ")
 
-project_data_screen <- read_csv(file = my_path_new_screen)
+#my_path_new_screen <- readline(prompt="insert path for new donor screen: ")
 
-#data/03_project_data_clean_aug.csv
-
+project_data_screen <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
 
 # Wrangle data ------------------------------------------------------------
@@ -86,11 +82,10 @@ test4 <- rename(test4, sequence_matches=rowname)
 
 
 
-test5 <- merge(test3, test4, by="sequence_matches", all=T) %>%
-  arrange(sequence_matches) 
+test5 <- merge(test3, test4, by="sequence_matches", all=T)
+test5 <- arrange(test5, as.integer(sequence_matches))
 
 test5 <- select(test5, -sequence_matches, -Sequence, -last_col()) 
-
 
 
 final_file <- bind_cols(donor_response_database,test5)
