@@ -74,6 +74,7 @@ my_data_clean_aug_pooling %>%
        y = "Log-fold change",
        title = "Log-fold change vs sequence") +
   scale_size(range = c(0.1,1))
+
 # Write data --------------------------------------------------------------
 ggsave(filename = "/cloud/project/results/04_dotplot.png",
        width = 10, 
