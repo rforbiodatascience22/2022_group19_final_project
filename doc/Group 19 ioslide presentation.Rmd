@@ -22,7 +22,7 @@ knitr::opts_chunk$set(echo = FALSE)
 
 ## Project data
 
-![](images/project_data_explained.png){width=80%}
+![](images/project_data_explained.png){width=100%}
 
 
 
@@ -50,14 +50,7 @@ test
 ```
 
 
-
-
-
-
-
-
 ## Loading data - merging sheets{.smaller}
-
 
 sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
 
@@ -95,17 +88,33 @@ data_frame
 ## Flow chart or flowchart
 
 
-## Wrangling of data
+## Data wrangling before plotting log-fold change graph
 
-project_data_clean <- project_data %>%
-  filter(log_fold_change > 0 
-         & input.1 > 50 
-         & input.2 > 50 
-         & input.3 > 50)
+```{r results = 'hide', message = FALSE}
+##R code
+setwd("/cloud/project")
 
-project_data_clean_aug <- project_data_clean %>%
-  mutate(id = paste0(Peptide, " (", Origin, ")"))
+my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
+```
+
+```{r echo = TRUE}
+#Setting the threshold
+threshold <- my_data_clean_aug %>% 
+  count(Origin) %>% 
+  filter(n > 50) %>% 
+  count() %>% 
+  pull()
+
+#Pooling all groups of vira with less than 50 hits into 'Other'
+my_data_clean_aug_pooling <- my_data_clean_aug %>% 
+  mutate(Origin = as.factor(Origin)) %>% 
+  mutate(newID = fct_lump(Origin, threshold)) %>% 
+  mutate(value = case_when(log_fold_change <= 2 ~ 0,
+                           0.001 < p & log_fold_change >= 2 ~ 0,
+                           0.001 >= p & log_fold_change >= 2 ~ 1))
+
+```
 
 ## Slide with Plot
 

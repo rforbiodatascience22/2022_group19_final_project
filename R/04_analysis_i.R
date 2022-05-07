@@ -16,7 +16,6 @@ maximum_y <- my_data_clean_aug %>%
 
 #Determining the numbers of sequences per virus strain (Origin) and setting a threshold.
 threshold <- my_data_clean_aug %>% 
-  select(Origin) %>% 
   count(Origin) %>% 
   filter(n > 50) %>% 
   count() %>% 
