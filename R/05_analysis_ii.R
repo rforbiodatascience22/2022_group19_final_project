@@ -100,13 +100,7 @@ final_file <- bind_cols(donor_response_database,test5)
 #sequncematches i new dataframe  merche( data, data, by = sequnence_matches, all = true)
 
 
-# Visualise data ----------------------------------------------------------
-my_data_clean_aug %>% ...
-
-
 # Write data --------------------------------------------------------------
 
 
 write_csv(x = final_file,  "results/06_append_database.csv")
-
-ggsave(...)
