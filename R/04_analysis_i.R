@@ -57,7 +57,7 @@ my_data_clean_aug_pooling %>%
                      breaks = seq(0, 
                                   maximum_y, 
                                   2)) +
-  theme(legend.position = "none",
+  theme(legend.position= "none",
         plot.title = element_text(size = 10, 
                                   hjust = 0.5,
                                   face = "bold"),
@@ -74,7 +74,6 @@ my_data_clean_aug_pooling %>%
        y = "Log-fold change",
        title = "Log-fold change vs sequence") +
   scale_size(range = c(0.1,1))
-
 # Write data --------------------------------------------------------------
 ggsave(filename = "/cloud/project/results/04_dotplot.png",
        width = 10, 
