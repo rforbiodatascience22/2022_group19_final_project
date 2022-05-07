@@ -108,10 +108,12 @@ my_data_clean_aug_pooling <- my_data_clean_aug %>%
 
 ```
 
+
+
+
 ## Slide with Plot
 
 ![Awesome title](/cloud/project/results/04_dotplot.png){width=100%}
-
 
 
 
