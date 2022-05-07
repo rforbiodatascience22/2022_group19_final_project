@@ -1,61 +1,117 @@
 # Load libraries ----------------------------------------------------------
 library("tidyverse")
-library("ggplot2")
-
+library(stringr)
+library(usethis)
+library(dplyr)
 # Define functions --------------------------------------------------------
 #source(file = "R/99_project_functions.R")
 
+
 # Load data ---------------------------------------------------------------
-project_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
-# Wrangle data ------------------------------------------------------------ 
-heatmap_data <- project_data_clean_aug %>% 
-  filter(p < 0.01)
 
-# Visualize data ----------------------------------------------------------  
-heatmap <- heatmap_data %>% 
-  ggplot(aes(x = sample, 
-             y = id, 
-             fill = log_fold_change)) +
-  geom_tile() +
-  facet_grid(HLA~., 
-             scales = "free_y", 
-             space = "free") +
-  scale_fill_gradient2(low = "red", 
-                       mid = "white", 
-                       high = "darkgreen") +
-  labs(x = "Sample", 
-       y = "Peptide", 
-       title = "Awesome title", 
-       tag = "HLA type", 
-       fill = "Log-fold \nchange") +
-  theme(plot.tag = element_text(angle = -90),
-        plot.tag.position = c(1.05, 0.5),
-        strip.text.y = element_text(angle = 0),
-        strip.background = element_rect(fill = "white"),
-        panel.grid = element_blank(),
-        panel.border = element_rect(colour = "black", 
-                                    fill = NA),
-        axis.text.x = element_text(angle = 45, 
-                                   hjust = 1),
-        text = element_text(size = 8),
-        axis.title.x = element_text(size = 10),
-        axis.title.y = element_text(size = 10),
-        plot.title = element_text(size = 12, 
-                                  hjust = 0.5),
-        legend.title = element_text(size = 10),
-        plot.margin = unit (c (0.2, 2, 0.2, 0.2), 'cm'),
-        legend.position = c (1.3, 0.11)) +
-  geom_vline(mapping = NULL, 
-             xintercept = seq(1.5, length(unique(heatmap_data$sample)), by = 1),
-             colour='white') +
-  geom_hline(mapping = NULL, 
-             yintercept = seq(1.5, length(unique(heatmap_data$id)), by = 1), 
-             colour='white')
+my_path_donor_response_database <- readline(prompt="insert path for donor response database excel sheet: ")
+
+donor_response_database <- read_csv2(file = my_path_donor_response_database)
+
+#data/_raw/Copy of Buffycoat Virus-screen Overview r course.csv
+
+
+my_path_new_screen <- readline(prompt="insert path for new donor screen: ")
+
+project_data_screen <- read_csv(file = my_path_new_screen)
+
+#data/03_project_data_clean_aug.csv
+
+
+
+# Wrangle data ------------------------------------------------------------
+
+<<<<<<< HEAD
+n <- nrow(donor_response_database)
+=======
+df <- data.frame(matrix(ncol = length(donors), 
+                        nrow = nrow(donor_response_database)))
+>>>>>>> f792de0d77ec9c286a1af2e8c3cec2f9be4a1d1d
+
+
+my_name <- readline(prompt="Enter initials of person responsible for experiment: ")
+# print(my.name)
+
+
+#Adds appropriate names to the database sheet 
+donor_response_database <- donor_response_database %>% 
+  rename(
+    HLA = ...2,
+    origen = ...3,
+    sequence = ...4
+  )
+
+#Creates vector with unique donors
+sample_names <- pull(project_data_screen , sample)
+unique_sample <- unique(sample_names)
+donors <- str_subset(unique_sample,"NT", negate=TRUE)
+
+#Creates new empty dataframe based on amount of donor samples and variables in response database 
+new_dataframe <- data.frame(matrix(ncol= 1, nrow = nrow(donor_response_database)))
+colnames(new_dataframe) <- donors
+
+project_data_screen <- filter(project_data_screen, log_fold_change>2)
+
+string_peptides <- pull(donor_response_database, sequence)
+donor_responses <- pull(project_data_screen, Sequence)
+
+str_match(string_peptides,donor_responses[5])
+
+sequences <- pull(project_data_screen, Sequence)
+
+
+sequence_matches <- match(sequences,string_peptides)
+
+
+project_data_screen_matches <-mutate(project_data_screen, sequence_matches)
+
+test <- pivot_wider(project_data_screen, names_from = sample,
+                    values_from = sequence_matches)
+
+
+all_responses <- filter(project_data_screen_matches, sequence_matches != "NA")
+
+test <- pivot_wider(all_responses, names_from = sample,
+                    values_from = sequence_matches)
+
+test2 <-select(all_responses, sample, Sequence, sequence_matches, log_fold_change)
+
+test3 <-pivot_wider(test2, names_from = sample, values_from = log_fold_change)
+
+
+
+
+test4 <- new_dataframe %>%
+tibble::rownames_to_column()
+
+test4 <- rename(test4, sequence_matches=rowname)
+
+
+
+
+test5 <- merge(test3, test4, by="sequence_matches", all=T) %>%
+arrange(sequence_matches) 
+
+test5 <- select(test5, -sequence_matches, -Sequence, -last_col()) 
+
+
+
+final_file <- bind_cols(donor_response_database,test5)
+
+
+#sequncematches i new dataframe  merche( data, data, by = sequnence_matches, all = true)
+
+
+# Visualise data ----------------------------------------------------------
+my_data_clean_aug %>% ...
+
 
 # Write data --------------------------------------------------------------
-ggsave(filename = "/cloud/project/results/06_heatmap.png", 
-       plot = heatmap, 
-       width = 5, 
-       height = 8,
-       device = "png")
+write_tsv(...)
+ggsave(...)
