@@ -6,7 +6,6 @@ library("ggplot2")
 # Load data ---------------------------------------------------------------
 my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
-
 # Wrangle data ------------------------------------------------------------
 
 #Finding maximum to determine the range of the axis on the plot
@@ -36,6 +35,9 @@ my_data_clean_aug_pooling <- my_data_clean_aug %>%
 pointsofinterest <- my_data_clean_aug_pooling %>% 
   filter(0.001 >= p & log_fold_change >= 2)
 
+pointswithpsig <- my_data_clean_aug_pooling %>% 
+  filter(0.001 >= p & log_fold_change < 2)
+
 #Plotting a log-fold-change graph
 my_data_clean_aug_pooling %>% 
   ggplot(aes(x = Peptide, 
@@ -46,6 +48,8 @@ my_data_clean_aug_pooling %>%
   geom_point(aes_string(size = "value")) +
   geom_point(data = pointsofinterest, 
              color = "red") +
+  geom_point(data = pointswithpsig,
+             color = "blue") +
   geom_hline(yintercept = 2, 
              linetype = "dashed") +
   scale_y_continuous(limits = c(0, 
