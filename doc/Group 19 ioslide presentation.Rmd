@@ -13,16 +13,10 @@ library("rmarkdown")
 library("knitr")
 ```
 
-```{r setup, include = FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
 
+## Project data{.centered}
 
-
-
-## Project data
-
-![](images/project_data_explained.png){width=100%}
+![](images/project_data_explained.png){width=90%}
 
 
 
