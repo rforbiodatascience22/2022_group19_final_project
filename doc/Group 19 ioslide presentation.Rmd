@@ -3,54 +3,46 @@ title: "Group 19 presentation"
 author: "Rasmus, Mikkel, Lasse"
 date: '2022-05-07'
 output: ioslides_presentation
+
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE)
-```
 
-## R Markdown
-
-Text
-
-## Slide with Bullets
-
-- Bullet 1
-- Bullet 2
-- Bullet 3
-
-## Slide with R Output
-
-```{r cars, echo = TRUE}
-summary(cars)
-```
-
-## Loading data
-
-```{r}
-# Load libraries ----------------------------------------------------------
+```{r, include = FALSE}
+# Load libraries 
 suppressPackageStartupMessages(library("tidyverse"))
 library("readxl")
 library("rmarkdown")
 library("knitr")
 ```
 
-![Raw excel file with several sheets](images/project_data_raw.png){width=100%}
 
-## Loading data - merging sheets{.smaller}
+## Project data{.centered}
 
-read_excel("data/_raw/project_data_raw.xlsx")
+![](images/project_data_explained.png){width=90%}
+
+
+
+## Project data
+
+![Raw excel file with several sheets](images/project_data_raw.png){width=90%}
+
+
+
+
+
+
+## Loading data{.smaller}
 
 ```{r}
 setwd("/cloud/project")
-test <- read_excel("data/_raw/project_data_raw.xlsx")
 
-test
+data <- read_excel("data/_raw/project_data_raw.xlsx")
+
+data
 ```
 
 
 ## Loading data - merging sheets{.smaller}
-
 
 sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
 
@@ -60,7 +52,7 @@ data_frame <- lapply(setNames(sheet, sheet),
 data_frame <- bind_rows(data_frame, 
                         .id = "Sheet")
 
-```{r}
+```{r, echo = FALSE}
 # Load data ---------------------------------------------------------------
 # Set working directory
 setwd("/cloud/project")
@@ -84,9 +76,52 @@ data_frame
 ```
 
 
+
+## Flow chart or flowchart
+
+
+## Data wrangling before plotting log-fold change graph
+
+```{r results = 'hide', message = FALSE, echo = FALSE}
+##R code
+setwd("/cloud/project")
+
+my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
+
+```
+
+```{r echo = TRUE}
+#Setting the threshold
+threshold <- my_data_clean_aug %>% 
+  count(Origin) %>% 
+  filter(n > 50) %>% 
+  count() %>% 
+  pull()
+
+#Pooling all groups of vira with less than 50 hits into 'Other'
+my_data_clean_aug_pooling <- my_data_clean_aug %>% 
+  mutate(Origin = as.factor(Origin)) %>% 
+  mutate(newID = fct_lump(Origin, threshold)) %>% 
+  mutate(value = case_when(log_fold_change <= 2 ~ 0,
+                           0.001 < p & log_fold_change >= 2 ~ 0,
+                           0.001 >= p & log_fold_change >= 2 ~ 1))
+
+```
+
 ## Slide with Plot
 
-```{r pressure}
-plot(pressure)
-```
+![Awesome title](/cloud/project/results/04_dotplot.png){width=100%}
+
+
+
+
+
+
+
+
+
+## Slide with Plot{.centered}
+
+![Awesome title](/cloud/project/results/05_heatmap.png){width=40%}
+
 

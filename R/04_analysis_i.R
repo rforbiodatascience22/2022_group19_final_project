@@ -16,7 +16,6 @@ maximum_y <- my_data_clean_aug %>%
 
 #Determining the numbers of sequences per virus strain (Origin) and setting a threshold.
 threshold <- my_data_clean_aug %>% 
-  select(Origin) %>% 
   count(Origin) %>% 
   filter(n > 50) %>% 
   count() %>% 
@@ -69,7 +68,8 @@ my_data_clean_aug_pooling %>%
         panel.border = element_rect(colour = "black", 
                                     fill = NA),
         axis.title.x = element_text(size = 8),
-        axis.title.y = element_text(size = 8)) +
+        axis.title.y = element_text(size = 8),
+        plot.background = element_rect(fill = "transparent", color = NA)) +
   labs(x = "ID", 
        y = "Log-fold change",
        title = "Log-fold change vs sequence") +

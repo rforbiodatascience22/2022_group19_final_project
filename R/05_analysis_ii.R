@@ -44,18 +44,28 @@ heatmap <- heatmap_data %>%
         plot.title = element_text(size = 12, 
                                   hjust = 0.5),
         legend.title = element_text(size = 10),
-        plot.margin = unit (c (0.2, 2, 0.2, 0.2), 'cm'),
-        legend.position = c (1.3, 0.11)) +
+        plot.margin = unit (c (0.2, 2, 0.2, 0.2), 
+                            'cm'),
+        legend.position = c (1.3, 0.11),
+        plot.background = element_rect(fill = "transparent", 
+                                       color = NA)) +
   geom_vline(mapping = NULL, 
-             xintercept = seq(1.5, length(unique(heatmap_data$sample)), by = 1),
+             xintercept = seq(1.5, 
+                              length(unique(pull(heatmap_data,
+                                                 sample))), 
+                              by = 1),
              colour='white') +
   geom_hline(mapping = NULL, 
-             yintercept = seq(1.5, length(unique(heatmap_data$id)), by = 1), 
+             yintercept = seq(1.5, 
+                              length(unique(pull(heatmap_data,
+                                                 sample))), 
+                              by = 1), 
              colour='white')
 
 # Write data --------------------------------------------------------------
-ggsave(filename = "/cloud/project/results/05_heatmap.png", 
+ggsave(filename = "/cloud/project/results/05_heatmap.png",
        plot = heatmap, 
        width = 5, 
        height = 8,
        device = "png")
+
