@@ -36,11 +36,14 @@ library("knitr")
 
 read_excel("data/_raw/project_data_raw.xlsx")
 
-```{r}
+
+```{r echo = F}
+# Set working directory
 setwd("/cloud/project")
-
 test <- read_excel("data/_raw/project_data_raw.xlsx")
+```
 
+```{r}
 test
 ```
 
@@ -55,10 +58,8 @@ data_frame <- lapply(setNames(sheet, sheet),
 data_frame <- bind_rows(data_frame, 
                         .id = "Sheet")
 
-```{r, echo = F}
-# Load data ---------------------------------------------------------------
+```{r echo = F}
 # Set working directory
-```{r}
 setwd("/cloud/project")
 
 # Accessing all excel sheets 
@@ -75,12 +76,14 @@ data_frame
 ```
 
 
+## Slide with log-fold change plot
+
+![](/cloud/project/results/04_dotplot.png){width=100%}
 
 
+## Data wrangling for plotting log-fold change graph
 
-## Data wrangling before plotting log-fold change graph
-
-```{r results = 'hide', message = FALSE}
+```{r echo = F, message = FALSE}
 ##R code
 setwd("/cloud/project")
 
@@ -105,17 +108,6 @@ my_data_clean_aug_pooling <- my_data_clean_aug %>%
                            0.001 >= p & log_fold_change >= 2 ~ 1))
 
 ```
-
-
-
-
-
-
-## Slide with Plot
-
-![](/cloud/project/results/04_dotplot.png){width=100%}
-
-
 
 
 
