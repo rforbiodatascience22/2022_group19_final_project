@@ -20,11 +20,19 @@ library("knitr")
 
 
 
+<<<<<<< HEAD
+=======
+## Flow chart or flowchart
+
+
+
+
+>>>>>>> 907e55c95fec2abb752cf86428c17752023b7efa
 
 
 ## Project data
 
-![Raw excel file with several sheets](images/project_data_raw.png){width=90%}
+![Raw excel-file contains several sheets](images/project_data_raw.png){width=90%}
 
 
 
@@ -46,6 +54,7 @@ test
 
 ## Loading data - merging sheets{.smaller}
 
+<<<<<<< HEAD
 sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
 
 data_frame <- lapply(setNames(sheet, sheet), 
@@ -57,29 +66,27 @@ data_frame <- bind_rows(data_frame,
 ```{r, echo = F}
 # Load data ---------------------------------------------------------------
 # Set working directory
+=======
+```{r}
+>>>>>>> 907e55c95fec2abb752cf86428c17752023b7efa
 setwd("/cloud/project")
 
 # Accessing all excel sheets 
 sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
 
-# Applying sheet names to dataframe names
+# Creating a list of individual data frames for each sheet
 data_frame <- lapply(setNames(sheet, sheet), 
-                       function(x) read_excel("data/_raw/project_data_raw.xlsx", sheet = x))
+                       function(x) read_excel("data/_raw/project_data_raw.xlsx", 
+                                              sheet = x))
 
-# Attaching all dataframes together
+# Attaching individual data frames together
 data_frame <- bind_rows(data_frame, 
                         .id = "Sheet")
-
-# Write data --------------------------------------------------------------
-write_csv(x = data_frame,
-          file = "data/01_project_data.csv")
 data_frame
-
 ```
 
 
 
-## Flow chart or flowchart
 
 
 ## Data wrangling before plotting log-fold change graph
@@ -110,9 +117,14 @@ my_data_clean_aug_pooling <- my_data_clean_aug %>%
 
 ```
 
+
+
+
+
+
 ## Slide with Plot
 
-![Awesome title](/cloud/project/results/04_dotplot.png){width=100%}
+![](/cloud/project/results/04_dotplot.png){width=100%}
 
 
 
@@ -121,9 +133,8 @@ my_data_clean_aug_pooling <- my_data_clean_aug %>%
 
 
 
+## Simple overview of viral responses{.centered}
 
-## Slide with Plot{.centered}
-
-![Awesome title](/cloud/project/results/05_heatmap.png){width=40%}
+![](/cloud/project/results/05_heatmap.png){width=42%}
 
 
