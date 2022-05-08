@@ -13,85 +13,59 @@ library(dplyr)
 
 donor_response_database <- read_csv2(file = "data/_raw/Copy of Buffycoat Virus-screen Overview r course.csv")
 
-
-
 #my_path_new_screen <- readline(prompt="insert path for new donor screen: ")
 
 project_data_screen <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
 
 # Wrangle data ------------------------------------------------------------
-usethis::use_git_config(user.name = "ACakeLover", user.email = "mirahan@dtu.dk")
+
 
 #Adds appropriate names to the database sheet 
 donor_response_database <- donor_response_database %>% 
   rename(
     HLA = ...2,
     origen = ...3,
-    sequence = ...4
-  )
+    sequence = ...4)
 
-#Creates vector with unique donors
-sample_names <- pull(project_data_screen , sample)
-unique_sample <- unique(sample_names)
-donors <- str_subset(unique_sample,"NT", negate=TRUE)
-
-#Creates new empty dataframe based on amount of donor samples and variables in response database 
-new_dataframe <- data.frame(matrix(ncol= 1, nrow = nrow(donor_response_database)))
-colnames(new_dataframe) <- donors
-
-project_data_screen <- filter(project_data_screen, log_fold_change>2)
-
+#all peptides mentioned in the database 
 string_peptides <- pull(donor_response_database, sequence)
-donor_responses <- pull(project_data_screen, Sequence)
-
-str_match(string_peptides,donor_responses[5])
-
-sequences <- pull(project_data_screen, Sequence)
 
 
-sequence_matches <- match(sequences,string_peptides)
+#Removes samples under log fold change 2
+project_data_log_fold <- filter(project_data_screen, log_fold_change>2)
 
+#all peptide responses in the screened data with log fold change above 2
+donor_response_petides <- pull(project_data_log_fold, Sequence)
 
-project_data_screen_matches <-mutate(project_data_screen, sequence_matches)
+#matching the 2 list of peptides giving position of the matches on the database 
+sequence_matches <- match(donor_response_petides,string_peptides)
 
-test <- pivot_wider(project_data_screen, names_from = sample,
-                    values_from = sequence_matches)
+#adds database position of the given peptide in the database 
+project_data_screen_matches <-mutate(project_data_log_fold, sequence_matches)
 
-
+#removes peptides not in the database
 all_responses <- filter(project_data_screen_matches, sequence_matches != "NA")
 
-test <- pivot_wider(all_responses, names_from = sample,
-                    values_from = sequence_matches)
+#picking out relevant coumns 
+peptide_donor_to_db <- select(all_responses, sample, Sequence, sequence_matches, log_fold_change)
 
-test2 <-select(all_responses, sample, Sequence, sequence_matches, log_fold_change)
+database_position_donor  <-pivot_wider(peptide_donor_to_db, names_from = sample, values_from = log_fold_change)
 
-test3 <-pivot_wider(test2, names_from = sample, values_from = log_fold_change)
+#new dataframe to add values at right positions with index 
+new_df <- data.frame(matrix(ncol= 1, nrow = nrow(donor_response_database))) %>%
+tibble::rownames_to_column() %>%
+  rename(sequence_matches=rowname)
 
+#merging the 2 based on row position
+Positions_added <- merge(database_position_donor, new_df, by="sequence_matches", all=T) %>%
+  arrange(as.integer(sequence_matches))
 
+#removing the columns not to add in the final database and appending on the database sheet
+remove_coulumns <- select(Positions_added, -sequence_matches, -Sequence, -last_col())
 
-
-test4 <- new_dataframe %>%
-  tibble::rownames_to_column()
-
-test4 <- rename(test4, sequence_matches=rowname)
-
-
-
-
-test5 <- merge(test3, test4, by="sequence_matches", all=T)
-test5 <- arrange(test5, as.integer(sequence_matches))
-
-test5 <- select(test5, -sequence_matches, -Sequence, -last_col()) 
-
-
-final_file <- bind_cols(donor_response_database,test5)
-
-
-#sequncematches i new dataframe  merche( data, data, by = sequnence_matches, all = true)
-
+#append on database
+final_file <- bind_cols(donor_response_database, remove_coulumns )
 
 # Write data --------------------------------------------------------------
-
-
 write_csv(x = final_file,  "results/06_append_database.csv")
