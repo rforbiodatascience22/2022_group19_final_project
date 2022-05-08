@@ -25,7 +25,7 @@ threshold <- my_data_clean_aug %>%
 my_data_clean_aug_pooling <- my_data_clean_aug %>% 
   mutate(Origin = as.factor(Origin)) %>% 
   mutate(newID = fct_lump(Origin, threshold)) %>% 
-  mutate(size_value = case_when(log_fold_change <= 2 ~ 0,
+  mutate(size_value = case_when(0.001 < p & log_fold_change <= 2 ~ 0,
                                 0.001 >= p & log_fold_change < 2 ~ 1,
                                 0.001 >= p & log_fold_change >= 2 ~ 1))
 
