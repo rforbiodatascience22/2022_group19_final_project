@@ -1,6 +1,6 @@
 ---
-title: "Group 19 presentation"
-author: "Rasmus, Mikkel, Lasse"
+title: "Investigating CD8 T cell antigen reactivities"
+author: "Rasmus, Mikkel, Lasse - Group 19"
 date: '2022-05-07'
 output: ioslides_presentation
 ---
@@ -14,8 +14,8 @@ library("knitr")
 ```
 
 
-## Project data{.centered}
-- sequencing -> Barracoda pipeline -> wrangling + visualization
+## Introduction {.centered}
+- Sequencing -> Barracoda pipeline -> our wrangling + visualization
 - Aim: To build a pipeline of data wrangling and visualizations after barracoda pipeline to explore sequence hits
 ![](images/project_data_explained.png){width=85%}
 
@@ -32,7 +32,7 @@ library("knitr")
 
 
 
-## Loading data{.smaller}
+## Loading data {.smaller}
 
 read_excel("data/_raw/project_data_raw.xlsx")
 
@@ -41,9 +41,6 @@ read_excel("data/_raw/project_data_raw.xlsx")
 # Set working directory
 setwd("/cloud/project")
 test <- read_excel("data/_raw/project_data_raw.xlsx")
-```
-
-```{r}
 test
 ```
 
@@ -76,20 +73,9 @@ data_frame
 ```
 
 
-## Slide with log-fold change plot
-- Goal: visualize whether specific CD8 T cells that recognize the same viral epitope are found in multiple samples.
+## Viral responses in multiple samples?
+- Goal: Visualize whether specific CD8 T cells that recognize the same viral epitope are found in multiple samples.
 ![](/cloud/project/results/04_dotplot.png){width=90%}
-
-
-## Data wrangling for plotting log-fold change graph
-
-```{r echo = F, message = FALSE}
-##R code
-setwd("/cloud/project")
-
-my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
-
-```
 
 
 ## Simple overview of viral responses{.centered}
