@@ -30,7 +30,8 @@ heatmap <- heatmap_data %>%
        tag = "HLA type", 
        fill = "Log-fold \nchange") +
   theme(plot.tag = element_text(angle = -90),
-        plot.tag.position = c(1.05, 0.5),
+        plot.tag.position = c(1.05, 
+                              0.5),
         strip.text.y = element_text(angle = 0),
         strip.background = element_rect(fill = "white"),
         panel.grid = element_blank(),
