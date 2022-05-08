@@ -15,10 +15,9 @@ library("knitr")
 
 
 ## Project data{.centered}
+- Aim: To build a pipeline of data wrangling and visualisations after barracoda pipeline to explore sequence hits
+![](images/project_data_explained.png){width=85%}
 
-![](images/project_data_explained.png){width=90%}
-
-=======
 ## Flow chart or flowchart
 
 
@@ -90,28 +89,6 @@ setwd("/cloud/project")
 my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
 
 ```
-
-```{r echo = TRUE}
-#Setting the threshold
-threshold <- my_data_clean_aug %>% 
-  count(Origin) %>% 
-  filter(n > 50) %>% 
-  count() %>% 
-  pull()
-
-#Pooling all groups of vira with less than 50 hits into 'Other'
-my_data_clean_aug_pooling <- my_data_clean_aug %>% 
-  mutate(Origin = as.factor(Origin)) %>% 
-  mutate(newID = fct_lump(Origin, threshold)) %>% 
-  mutate(value = case_when(log_fold_change <= 2 ~ 0,
-                           0.001 < p & log_fold_change >= 2 ~ 0,
-                           0.001 >= p & log_fold_change >= 2 ~ 1))
-
-```
-
-
-
-
 
 
 ## Simple overview of viral responses{.centered}
