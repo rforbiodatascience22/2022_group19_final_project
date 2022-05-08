@@ -15,7 +15,8 @@ library("knitr")
 
 
 ## Project data{.centered}
-- Aim: To build a pipeline of data wrangling and visualisations after barracoda pipeline to explore sequence hits
+- sequencing -> Barracoda pipeline -> wrangling + visualization
+- Aim: To build a pipeline of data wrangling and visualizations after barracoda pipeline to explore sequence hits
 ![](images/project_data_explained.png){width=85%}
 
 ## Flow chart or flowchart
@@ -76,8 +77,8 @@ data_frame
 
 
 ## Slide with log-fold change plot
-
-![](/cloud/project/results/04_dotplot.png){width=100%}
+- Goal: visualize whether specific CD8 T cells recognizing the same viral epitope are found in multiple samples.
+![](/cloud/project/results/04_dotplot.png){width=90%}
 
 
 ## Data wrangling for plotting log-fold change graph
