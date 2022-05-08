@@ -2,7 +2,9 @@
 title: "Investigating CD8 T cell antigen reactivities"
 author: "Rasmus, Mikkel, Lasse - Group 19"
 date: '2022-05-07'
-output: ioslides_presentation
+output:
+  ioslides_presentation: default
+  beamer_presentation: default
 ---
 
 ```{r, include = FALSE}
@@ -17,11 +19,15 @@ library("knitr")
 ## Introduction {.centered}
 - Sequencing -> Barracoda pipeline -> our wrangling + visualization
 - Aim: To build a pipeline of data wrangling and visualizations after barracoda pipeline to explore sequence hits
-![](images/project_data_explained.png){width=85%}
+
+![](images/project_data_explained.png){width=110%}
+
 
 ## Flow chart or flowchart
-
-
+<br>
+<center>
+![](images/flowdiagram_r_course.png){width=90%}
+</center>
 
 ## Project data
 
@@ -67,11 +73,66 @@ data_frame
 
 ## Viral responses in multiple samples?
 - Goal: Visualize whether specific CD8 T cells that recognize the same viral epitope are found in multiple samples.
+<center>
 ![](/cloud/project/results/04_dotplot.png){width=90%}
-
+</center>
 
 ## Simple overview of viral responses{.centered}
 
+
 ![](/cloud/project/results/05_heatmap.png){width=42%}
+
+## Donor response database 
+
+-The database has a special format
+
+<center>
+![](images/donor_response_database.png){width=80%}
+</center>
+
+
+
+## Appending new responses on the response database
+
+- Remove irrelevant data (log_fold_change >2)
+- Match peptides in the database sheet with the the ones from the dataset 
+- Assign a database row position to the macthed peptides
+- Create a dataframe with the same amount of rows and add matching peptides on corresponing rows
+- Append it on the database
+
+
+## Adding database row positions to matching data
+<br>
+<br>
+<center>
+![](images/positions.png){width=100%}
+
+</center>
+
+
+## Adding values in the right rows {.vcenter}
+<br>
+<br>
+<br>
+<center>
+![](images/merge_df.png){width=100%}
+</center>
+
+
+## Final product
+
+<center>
+![](images/append_on_database.png){width=50%}
+</center>
+
+
+##
+<br>
+<br>
+<br>
+<br>
+<br>
+<span style="font-family:Ariel; font-size:6em;">Questions?
+
 
 

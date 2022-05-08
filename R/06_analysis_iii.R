@@ -45,6 +45,8 @@ donor_response_petides <- pull(project_data_log_fold, Sequence)
 #matching the 2 list of peptides giving position of the matches on the database 
 sequence_matches <- match(donor_response_petides,string_peptides)
 
+sequence_matches
+
 #adds database position of the given peptide in the database 
 project_data_screen_matches <-mutate(project_data_log_fold, sequence_matches)
 
@@ -67,13 +69,17 @@ Positions_added <- merge(database_position_donor, new_df, by="sequence_matches",
   arrange(as.integer(sequence_matches))
 
 #removing the columns not to add in the final database and appending on the database sheet
-remove_coulumns <- select(Positions_added, -sequence_matches, -Sequence, -last_col())
+final_position_df <- select(Positions_added, -sequence_matches, -Sequence, -last_col())
 
 #append on database
-final_file <- bind_cols(donor_response_database, remove_coulumns )
+final_file <- bind_cols(donor_response_database, final_position_df)
+
+
+
 
 # Write data --------------------------------------------------------------
 
 write_csv(x = final_file,  "results/06_append_database.csv")
+
 
 
