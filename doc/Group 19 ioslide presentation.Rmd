@@ -34,29 +34,20 @@ library("knitr")
 
 ## Loading data {.smaller}
 
-read_excel("data/_raw/project_data_raw.xlsx")
 
-
-```{r echo = F}
-# Set working directory
+```{r}
 setwd("/cloud/project")
-test <- read_excel("data/_raw/project_data_raw.xlsx")
-test
+
+data <- read_excel("data/_raw/project_data_raw.xlsx")
+
+data
 ```
+
 
 
 ## Loading data - merging sheets{.smaller}
 
-sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
-
-data_frame <- lapply(setNames(sheet, sheet), 
-                       function(x) read_excel("data/_raw/project_data_raw.xlsx", sheet = x))
-
-data_frame <- bind_rows(data_frame, 
-                        .id = "Sheet")
-
-```{r echo = F}
-# Set working directory
+```{r}
 setwd("/cloud/project")
 
 # Accessing all excel sheets 
@@ -64,7 +55,8 @@ sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
 
 # Creating a list of individual data frames for each sheet
 data_frame <- lapply(setNames(sheet, sheet), 
-                       function(x) read_excel("data/_raw/project_data_raw.xlsx", sheet = x))
+                       function(x) read_excel("data/_raw/project_data_raw.xlsx", 
+                                              sheet = x))
 
 # Attaching individual data frames together
 data_frame <- bind_rows(data_frame, 
