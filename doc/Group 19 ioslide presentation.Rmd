@@ -1,11 +1,9 @@
 ---
-title: "Group 19 presentation"
-author: "Rasmus, Mikkel, Lasse"
+title: "Investigating CD8 T cell antigen reactivities"
+author: "Rasmus, Mikkel, Lasse - Group 19"
 date: '2022-05-07'
 output: ioslides_presentation
-
 ---
-
 
 ```{r, include = FALSE}
 # Load libraries 
@@ -16,22 +14,26 @@ library("knitr")
 ```
 
 
-## Project data{.centered}
+## Introduction {.centered}
+- Sequencing -> Barracoda pipeline -> our wrangling + visualization
+- Aim: To build a pipeline of data wrangling and visualizations after barracoda pipeline to explore sequence hits
+![](images/project_data_explained.png){width=85%}
 
-![](images/project_data_explained.png){width=90%}
+## Flow chart or flowchart
 
 
 
 ## Project data
 
-![Raw excel file with several sheets](images/project_data_raw.png){width=90%}
+![Raw excel-file contains several sheets](images/project_data_raw.png){width=90%}
 
 
 
 
 
 
-## Loading data{.smaller}
+## Loading data {.smaller}
+
 
 ```{r}
 setwd("/cloud/project")
@@ -42,88 +44,34 @@ data
 ```
 
 
+
 ## Loading data - merging sheets{.smaller}
 
-sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
-
-data_frame <- lapply(setNames(sheet, sheet), 
-                       function(x) read_excel("data/_raw/project_data_raw.xlsx", sheet = x))
-
-data_frame <- bind_rows(data_frame, 
-                        .id = "Sheet")
-
-```{r, echo = FALSE}
-# Load data ---------------------------------------------------------------
-# Set working directory
+```{r}
 setwd("/cloud/project")
 
 # Accessing all excel sheets 
 sheet <- excel_sheets("data/_raw/project_data_raw.xlsx")
 
-# Applying sheet names to dataframe names
+# Creating a list of individual data frames for each sheet
 data_frame <- lapply(setNames(sheet, sheet), 
-                       function(x) read_excel("data/_raw/project_data_raw.xlsx", sheet = x))
+                       function(x) read_excel("data/_raw/project_data_raw.xlsx", 
+                                              sheet = x))
 
-# Attaching all dataframes together
+# Attaching individual data frames together
 data_frame <- bind_rows(data_frame, 
                         .id = "Sheet")
-
-# Write data --------------------------------------------------------------
-write_csv(x = data_frame,
-          file = "data/01_project_data.csv")
 data_frame
-
 ```
 
 
-
-## Flow chart or flowchart
-
-
-## Data wrangling before plotting log-fold change graph
-
-```{r results = 'hide', message = FALSE, echo = FALSE}
-##R code
-setwd("/cloud/project")
-
-my_data_clean_aug <- read_csv(file = "data/03_project_data_clean_aug.csv")
-
-```
-
-```{r echo = TRUE}
-#Setting the threshold
-threshold <- my_data_clean_aug %>% 
-  count(Origin) %>% 
-  filter(n > 50) %>% 
-  count() %>% 
-  pull()
-
-#Pooling all groups of vira with less than 50 hits into 'Other'
-my_data_clean_aug_pooling <- my_data_clean_aug %>% 
-  mutate(Origin = as.factor(Origin)) %>% 
-  mutate(newID = fct_lump(Origin, threshold)) %>% 
-  mutate(value = case_when(log_fold_change <= 2 ~ 0,
-                           0.001 < p & log_fold_change >= 2 ~ 0,
-                           0.001 >= p & log_fold_change >= 2 ~ 1))
-
-```
+## Viral responses in multiple samples?
+- Goal: Visualize whether specific CD8 T cells that recognize the same viral epitope are found in multiple samples.
+![](/cloud/project/results/04_dotplot.png){width=90%}
 
 
+## Simple overview of viral responses{.centered}
 
-
-## Slide with Plot
-
-![Awesome title](/cloud/project/results/04_dotplot.png){width=100%}
-
-
-
-
-
-
-
-
-## Slide with Plot{.centered}
-
-![Awesome title](/cloud/project/results/05_heatmap.png){width=40%}
+![](/cloud/project/results/05_heatmap.png){width=42%}
 
 

@@ -25,39 +25,40 @@ threshold <- my_data_clean_aug %>%
 my_data_clean_aug_pooling <- my_data_clean_aug %>% 
   mutate(Origin = as.factor(Origin)) %>% 
   mutate(newID = fct_lump(Origin, threshold)) %>% 
-  mutate(value = case_when(log_fold_change <= 2 ~ 0,
-                           0.001 < p & log_fold_change >= 2 ~ 0,
-                           0.001 >= p & log_fold_change >= 2 ~ 1))
+  mutate(size_value = case_when(0.001 < p & log_fold_change <= 2 ~ 0,
+                                0.001 >= p & log_fold_change < 2 ~ 1,
+                                0.001 >= p & log_fold_change >= 2 ~ 1))
 
 
-#Determining the datapoints that we want highlighted in the graph
-pointsofinterest <- my_data_clean_aug_pooling %>% 
-  filter(0.001 >= p & log_fold_change >= 2)
 
-pointswithpsig <- my_data_clean_aug_pooling %>% 
-  filter(0.001 >= p & log_fold_change < 2)
-
-#Plotting a log-fold-change graph
+### Plot v2
 my_data_clean_aug_pooling %>% 
+  mutate(Significance = case_when(0.001 >= p & log_fold_change >= 2 ~ "Of_interest",
+                                  0.001 >= p & log_fold_change < 2 ~ "p_sig",
+                                  TRUE ~ "Others")) %>% 
   ggplot(aes(x = Peptide, 
              y = log_fold_change)) +
-  facet_grid(.~newID,
-             scales = "free_x",
-             space = "free") +
-  geom_point(aes_string(size = "value")) +
-  geom_point(data = pointsofinterest, 
-             color = "red") +
-  geom_point(data = pointswithpsig,
-             color = "blue") +
-  geom_hline(yintercept = 2, 
-             linetype = "dashed") +
+  geom_point(aes(size = size_value, 
+                 colour = Significance)) +
+  geom_hline(yintercept = 2, linetype = "dashed") +
+  scale_color_manual(name = "Significance",
+                     values = c(Of_interest = "red", 
+                                p_sig = "blue",
+                                Others = "black")) +
+  scale_size(range = c(0.1,
+                       1), 
+             guide = "none") +
   scale_y_continuous(limits = c(0, 
                                 maximum_y),
-                     breaks = seq(0, 
-                                  maximum_y, 
-                                  2)) +
-  theme(legend.position= "none",
-        plot.title = element_text(size = 10, 
+    breaks = seq(0, 
+                 maximum_y, 
+                 2)) +
+  labs(x = "ID", 
+       y = "Log-fold change",
+       title = "Log-fold change vs sequence") +
+  facet_grid(.~newID, 
+             scales = "free_x", space = "free") +
+  theme(plot.title = element_text(size = 10, 
                                   hjust = 0.5,
                                   face = "bold"),
         axis.text.x = element_text(size = 5,
@@ -69,11 +70,8 @@ my_data_clean_aug_pooling %>%
                                     fill = NA),
         axis.title.x = element_text(size = 8),
         axis.title.y = element_text(size = 8),
-        plot.background = element_rect(fill = "transparent", color = NA)) +
-  labs(x = "ID", 
-       y = "Log-fold change",
-       title = "Log-fold change vs sequence") +
-  scale_size(range = c(0.1,1))
+        plot.background = element_rect(fill = "transparent", 
+                                       color = NA))
 
 # Write data --------------------------------------------------------------
 ggsave(filename = "/cloud/project/results/04_dotplot.png",

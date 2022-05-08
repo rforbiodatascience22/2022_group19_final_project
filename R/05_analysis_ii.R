@@ -26,11 +26,12 @@ heatmap <- heatmap_data %>%
                        high = "darkgreen") +
   labs(x = "Sample", 
        y = "Peptide", 
-       title = "Awesome title", 
+       title = "Overview of viral responses", 
        tag = "HLA type", 
        fill = "Log-fold \nchange") +
   theme(plot.tag = element_text(angle = -90),
-        plot.tag.position = c(1.05, 0.5),
+        plot.tag.position = c(1.05, 
+                              0.5),
         strip.text.y = element_text(angle = 0),
         strip.background = element_rect(fill = "white"),
         panel.grid = element_blank(),
@@ -46,9 +47,7 @@ heatmap <- heatmap_data %>%
         legend.title = element_text(size = 10),
         plot.margin = unit (c (0.2, 2, 0.2, 0.2), 
                             'cm'),
-        legend.position = c (1.3, 0.11),
-        plot.background = element_rect(fill = "transparent", 
-                                       color = NA)) +
+        legend.position = c (1.3, 0.11)) +
   geom_vline(mapping = NULL, 
              xintercept = seq(1.5, 
                               length(unique(pull(heatmap_data,
@@ -58,7 +57,7 @@ heatmap <- heatmap_data %>%
   geom_hline(mapping = NULL, 
              yintercept = seq(1.5, 
                               length(unique(pull(heatmap_data,
-                                                 sample))), 
+                                                 id))), 
                               by = 1), 
              colour='white')
 
