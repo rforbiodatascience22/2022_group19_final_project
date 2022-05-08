@@ -77,7 +77,7 @@ data_frame
 
 
 ## Slide with log-fold change plot
-- Goal: visualize whether specific CD8 T cells recognizing the same viral epitope are found in multiple samples.
+- Goal: visualize whether specific CD8 T cells that recognize the same viral epitope are found in multiple samples.
 ![](/cloud/project/results/04_dotplot.png){width=90%}
 
 
